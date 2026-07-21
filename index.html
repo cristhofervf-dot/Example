@@ -2,194 +2,1159 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechFood POS - Sistema Completo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TechFood POS PRO - Sistema Completo</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         :root {
             --primary: #0a0e27;
+            --secondary: #111b3c;
             --accent: #00d9ff;
             --success: #00ff88;
             --danger: #ff3366;
             --warning: #ffaa00;
+            --text: #e0f7ff;
+            --text-secondary: #a8d8ff;
+            --border: #1a3a5c;
+            --neon-purple: #9d00ff;
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
             background: linear-gradient(135deg, #000000 0%, var(--primary) 50%, #050a1a 100%);
-            color: #e0f7ff;
-            min-height: 100vh;
-        }
-        header {
-            background: #0a0e27;
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 4px solid var(--accent);
-        }
-        nav {
-            padding: 10px;
-            background: #111b3c;
+            color: var(--text);
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
+            flex-direction: column;
         }
-        .btn {
-            padding: 12px 20px;
-            border: none;
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #050a1a 100%);
+            border-bottom: 3px solid var(--accent);
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .header-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* NAV PRINCIPAL */
+        nav {
+            display: flex;
+            gap: 0.3rem;
+            background: var(--secondary);
+            padding: 0.4rem;
             border-radius: 8px;
-            font-weight: bold;
+            border: 1px solid var(--border);
+            margin: 0.8rem 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.6rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
             cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            font-weight: 500;
         }
-        .btn-success { background: var(--success); color: #000; }
-        .btn-primary { background: var(--accent); color: #000; }
-        .btn-danger { background: var(--danger); color: white; }
-        .section { display: none; padding: 15px; }
-        .section.active { display: block; }
-        .tables-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
         }
-        .table-card {
-            background: #111b3c;
-            border: 3px solid #1a3a5c;
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        /* SECCIONES */
+        .section {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            background: var(--secondary);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
-            text-align: center;
+            padding: 1rem;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* MESAS */
+        .mesas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            overflow-y: auto;
+        }
+
+        .mesa {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #1a3a5c 0%, #0f2438 100%);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
             transition: all 0.3s;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
         }
-        .table-card:hover { transform: scale(1.05); }
+
+        .mesa:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .mesa.libre {
+            background: linear-gradient(135deg, #1a3a5c 0%, #0f2438 100%);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .mesa.ocupada {
+            background: linear-gradient(135deg, #5c1a1a 0%, #380f0f 100%);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .mesa.pendiente {
+            background: linear-gradient(135deg, #5c4a1a 0%, #382a0f 100%);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        /* PEDIDOS */
+        .pedidos-container {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1rem;
+            height: 100%;
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.8rem;
+            overflow-y: auto;
+        }
+
+        .producto-btn {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, #6a0080 100%);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            text-align: center;
+        }
+
+        .producto-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.6);
+        }
+
+        .producto-precio {
+            font-size: 0.7rem;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* RESUMEN PEDIDO */
+        .resumen-pedido {
+            background: linear-gradient(135deg, var(--primary) 0%, #050a1a 100%);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .item-pedido {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem;
+            background: var(--secondary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .item-pedido-controls {
+            display: flex;
+            gap: 0.3rem;
+            align-items: center;
+        }
+
+        .item-pedido-controls button {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .totales {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border-top: 2px solid var(--accent);
+            padding-top: 1rem;
+            font-weight: bold;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .total-final {
+            font-size: 1.3rem;
+            color: var(--success);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* BOTONES */
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-direction: column;
+        }
+
+        button {
+            padding: 0.8rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #00b8d4 100%);
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #00cc66 100%);
+            color: var(--primary);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #ff0055 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #ff8800 100%);
+            color: var(--primary);
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+        }
+
+        /* MODALES */
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
+
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
-            background: #111b3c;
-            padding: 25px;
-            border-radius: 12px;
+            background: var(--secondary);
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
             width: 90%;
-            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.4);
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0;
+        }
+
+        /* FORMULARIO */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+        }
+
+        /* TABLA */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        thead {
+            background: var(--primary);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        th {
+            padding: 0.8rem;
+            text-align: left;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(157, 0, 255, 0.1) 100%);
+        }
+
+        /* ESTADÍSTICAS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, #6a0080 100%);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .pedidos-container {
+                grid-template-columns: 1fr;
+            }
+
+            .productos-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .mesas-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            nav {
+                overflow-x: auto;
+            }
+        }
+
+        /* IMPRESIÓN */
+        @media print {
+            * {
+                background: white !important;
+                color: black !important;
+            }
+
+            body, html {
+                width: 80mm;
+                margin: 0;
+            }
+
+            .no-print, nav, header, .nav-btn, .modal, button, .container {
+                display: none !important;
+            }
+        }
+
+        /* SCROLL */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>🍔 TechFood POS Chile</h1>
-    <div id="dateTime" style="margin-top:5px;"></div>
-</header>
-
-<nav>
-    <button class="btn" onclick="switchSection('mesas')">🪑 Mesas</button>
-    <button class="btn" onclick="switchSection('inventario')">📦 Inventario</button>
-    <button class="btn" onclick="switchSection('reportes')">📊 Reportes</button>
-</nav>
-
-<!-- MESAS -->
-<section id="mesas" class="section active">
-    <h2>Gestión de Mesas</h2>
-    <div id="tablesGrid" class="tables-grid"></div>
-</section>
-
-<!-- INVENTARIO -->
-<section id="inventario" class="section">
-    <h2>Inventario</h2>
-    <div id="inventoryList"></div>
-</section>
-
-<!-- REPORTES -->
-<section id="reportes" class="section">
-    <h2>Reportes</h2>
-    <button class="btn btn-primary" onclick="generateReport()">Generar Reporte del Día</button>
-    <div id="reportContent" style="margin-top:20px; background:#1e2d4a; padding:15px; border-radius:8px;"></div>
-</section>
-
-<!-- MODAL -->
-<div id="orderModal" class="modal">
-    <div class="modal-content">
-        <h2>Mesa <span id="modalTableNum"></span></h2>
-        <div id="orderTotal" style="font-size:1.5rem; margin:15px 0;"></div>
-        <button class="btn btn-success" onclick="closeCurrentTable()">✅ Cerrar Mesa y Guardar</button>
-        <button class="btn" onclick="closeModal()">Cancelar</button>
-    </div>
-</div>
-
-<script>
-// ==================== VARIABLES GLOBALES ====================
-let tables = Array.from({length: 12}, (_, i) => ({
-    id: i+1,
-    number: i+1,
-    status: "libre",
-    order: null
-}));
-
-let currentTable = null;
-
-// ==================== FUNCIONES ====================
-function updateDateTime() {
-    document.getElementById("dateTime").textContent = new Date().toLocaleString("es-CL");
-}
-
-function renderTables() {
-    const grid = document.getElementById("tablesGrid");
-    grid.innerHTML = tables.map(table => `
-        <div class="table-card ${table.status}" onclick="openTable(${table.id})">
-            <div style="font-size:2.5rem; font-weight:bold;">${table.number}</div>
-            <div>${table.status === "libre" ? "🟢 Libre" : "🔴 Ocupada"}</div>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <h1>🍔 TechFood POS PRO</h1>
+            <div class="header-info">
+                <span>📅 <span id="fecha"></span></span>
+                <span>🕐 <span id="hora"></span></span>
+                <span>💰 Día: <span id="totalDia">$0</span></span>
+            </div>
         </div>
-    `).join("");
-}
+    </header>
 
-function openTable(id) {
-    currentTable = tables.find(t => t.id === id);
-    if (currentTable.status === "libre") {
-        currentTable.status = "ocupada";
-        currentTable.order = { total: 12500 };
-    }
-    document.getElementById("modalTableNum").textContent = currentTable.number;
-    document.getElementById("orderTotal").innerHTML = `Total: <strong>$${currentTable.order.total.toLocaleString("es-CL")}</strong>`;
-    document.getElementById("orderModal").style.display = "flex";
-}
+    <!-- NAV -->
+    <nav>
+        <button class="nav-btn active" onclick="mostrarSeccion('mesas')">🪑 Mesas</button>
+        <button class="nav-btn" onclick="mostrarSeccion('caja')">💳 Caja</button>
+        <button class="nav-btn" onclick="mostrarSeccion('inventario')">📦 Inventario</button>
+        <button class="nav-btn" onclick="mostrarSeccion('reportes')">📊 Reportes</button>
+        <button class="nav-btn" onclick="mostrarSeccion('config')">⚙️ Config</button>
+    </nav>
 
-function closeCurrentTable() {
-    if (currentTable) {
-        currentTable.status = "libre";
-        currentTable.order = null;
-    }
-    document.getElementById("orderModal").style.display = "none";
-    renderTables();
-}
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="container">
+        <!-- SECCIÓN MESAS -->
+        <div id="mesas" class="section active">
+            <h2 style="margin-bottom: 1rem; color: var(--accent);">GESTIÓN DE MESAS</h2>
+            <div class="mesas-grid" id="mesasGrid"></div>
+        </div>
 
-function closeModal() {
-    document.getElementById("orderModal").style.display = "none";
-}
+        <!-- SECCIÓN CAJA/PEDIDOS -->
+        <div id="caja" class="section" style="display: flex; gap: 1rem;">
+            <div class="pedidos-container" style="flex: 1;">
+                <div>
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">MENÚ</h3>
+                    <div class="productos-grid" id="productosGrid"></div>
+                </div>
+                <div class="resumen-pedido">
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;">📌 MESA <span id="mesaActual">-</span></h3>
+                    <div id="itemsPedido" style="flex: 1; overflow-y: auto; margin-bottom: 1rem;"></div>
+                    <div class="totales">
+                        <div class="total-line">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0</span>
+                        </div>
+                        <div class="total-line">
+                            <span>IVA 19%:</span>
+                            <span id="iva">$0</span>
+                        </div>
+                        <div class="total-final">
+                            <span>TOTAL:</span>
+                            <span id="totalPedido">$0</span>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="imprimirComanda()">🖨️ Comanda</button>
+                        <button class="btn-success" onclick="abrirPagos()">💰 Pagar</button>
+                        <button class="btn-danger btn-small" onclick="limpiarPedido()">🗑️ Limpiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-function generateReport() {
-    document.getElementById("reportContent").innerHTML = `
-        <h3>Reporte del Día</h3>
-        <p><strong>Ventas Totales:</strong> $245.000</p>
-        <p><strong>Pedidos:</strong> 18</p>
-        <p><strong>Mesas ocupadas:</strong> 7</p>
-    `;
-}
+        <!-- SECCIÓN INVENTARIO -->
+        <div id="inventario" class="section">
+            <h2 style="margin-bottom: 1rem; color: var(--accent);">INVENTARIO</h2>
+            <button class="btn-primary" onclick="abrirIngreso()" style="margin-bottom: 1rem;">➕ Agregar Stock</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Stock</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="inventarioTable"></tbody>
+            </table>
+        </div>
 
-function switchSection(sectionId) {
-    document.querySelectorAll(".section").forEach(section => {
-        section.classList.remove("active");
-    });
-    document.getElementById(sectionId).classList.add("active");
-}
+        <!-- SECCIÓN REPORTES -->
+        <div id="reportes" class="section">
+            <h2 style="margin-bottom: 1rem; color: var(--accent);">REPORTES</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="ventasHoy">$0</div>
+                    <div class="stat-label">Ventas Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="ventasMes">$0</div>
+                    <div class="stat-label">Ventas Mes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pedidosHoy">0</div>
+                    <div class="stat-label">Pedidos Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="ticketPromedio">$0</div>
+                    <div class="stat-label">Ticket Promedio</div>
+                </div>
+            </div>
+            <h3 style="margin-top: 2rem; color: var(--accent); margin-bottom: 1rem;">Últimas Transacciones</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Mesa</th>
+                        <th>Total</th>
+                        <th>Pago</th>
+                    </tr>
+                </thead>
+                <tbody id="ventasTable"></tbody>
+            </table>
+        </div>
 
-// ==================== INICIALIZACIÓN ====================
-renderTables();
-updateDateTime();
-setInterval(updateDateTime, 1000);
-</script>
+        <!-- SECCIÓN CONFIG -->
+        <div id="config" class="section">
+            <h2 style="margin-bottom: 1rem; color: var(--accent);">CONFIGURACIÓN</h2>
+            <div class="form-group">
+                <label>Nombre del Negocio</label>
+                <input type="text" id="nomNegocio" placeholder="TechFood">
+            </div>
+            <div class="form-group">
+                <label>Dirección</label>
+                <input type="text" id="dirNegocio" placeholder="Santiago, Chile">
+            </div>
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="text" id="telNegocio" placeholder="+56 9 1234 5678">
+            </div>
+            <div class="form-group">
+                <label>RUT</label>
+                <input type="text" id="rutNegocio" placeholder="12.345.678-9">
+            </div>
+            <button class="btn-success" onclick="guardarConfig()" style="margin-bottom: 1rem;">💾 Guardar</button>
+            <button class="btn-danger" onclick="confirmarBorrado()">🗑️ Limpiar Base de Datos</button>
+        </div>
+    </div>
+
+    <!-- MODAL PAGOS -->
+    <div id="modalPagos" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                Forma de Pago
+                <button class="modal-close" onclick="cerrarModal('modalPagos')">×</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <button class="btn-success" onclick="procesarPago('EFECTIVO')">💵 EFECTIVO</button>
+                <button class="btn-primary" onclick="procesarPago('TARJETA')">💳 TARJETA</button>
+                <button class="btn-primary" onclick="procesarPago('WEBPAY')">🏦 WEBPAY</button>
+                <button class="btn-danger" onclick="cerrarModal('modalPagos')">❌ CANCELAR</button>
+            </div>
+            <div class="form-group">
+                <label>Total a Pagar</label>
+                <input type="text" id="totalPago" readonly style="background: var(--primary); font-size: 1.3rem; font-weight: bold; color: var(--success);">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INGRESO STOCK -->
+    <div id="modalIngreso" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                Ingreso de Mercadería
+                <button class="modal-close" onclick="cerrarModal('modalIngreso')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Producto</label>
+                <select id="productoIngreso"></select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad</label>
+                <input type="number" id="cantidadIngreso" min="1" value="1">
+            </div>
+            <button class="btn-success" onclick="guardarIngreso()">✓ GUARDAR</button>
+        </div>
+    </div>
+
+    <!-- MODAL COMANDA -->
+    <div id="modalComanda" class="modal">
+        <div class="modal-content" style="max-width: 350px;">
+            <div id="contenidoComanda" style="font-family: monospace; font-size: 11px; line-height: 1.4; white-space: pre; background: white; color: black; padding: 1rem; border-radius: 8px; overflow-y: auto; max-height: 500px;"></div>
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                <button class="btn-primary" onclick="imprimirDirecto()">🖨️ IMPRIMIR</button>
+                <button class="btn-danger" onclick="cerrarModal('modalComanda')">CERRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ESTADO GLOBAL ====================
+        const APP = {
+            negocio: {
+                nombre: 'TechFood PRO',
+                direccion: 'Santiago, Chile',
+                telefono: '+56 9 1234 5678',
+                rut: '12.345.678-9'
+            },
+            mesas: [],
+            productos: [],
+            ventasHoy: [],
+            mesaActual: null,
+            IVA: 0.19
+        };
+
+        // ==================== INICIALIZAR ====================
+        function inicializar() {
+            cargarDatos();
+            if (APP.mesas.length === 0) crearMesas();
+            if (APP.productos.length === 0) crearProductos();
+            actualizarUI();
+            actualizarReloj();
+            setInterval(actualizarReloj, 1000);
+        }
+
+        // ==================== MESAS ====================
+        function crearMesas() {
+            for (let i = 1; i <= 12; i++) {
+                APP.mesas.push({
+                    numero: i,
+                    estado: 'libre',
+                    pedidos: []
+                });
+            }
+            guardarDatos();
+        }
+
+        function renderMesas() {
+            const grid = document.getElementById('mesasGrid');
+            grid.innerHTML = APP.mesas.map(mesa => `
+                <div class="mesa ${mesa.estado}" onclick="seleccionarMesa(${mesa.numero})">
+                    <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🪑</div>
+                    <div>Mesa ${mesa.numero}</div>
+                    <div style="font-size: 0.7rem; margin-top: 0.3rem; opacity: 0.8;">${mesa.estado.toUpperCase()}</div>
+                    ${mesa.pedidos.length > 0 ? `<div style="font-size: 0.8rem; margin-top: 0.3rem;">🛒 ${mesa.pedidos.length}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function seleccionarMesa(numero) {
+            const mesa = APP.mesas.find(m => m.numero === numero);
+            APP.mesaActual = mesa;
+            document.getElementById('mesaActual').textContent = numero;
+            mostrarSeccion('caja');
+            actualizarPedido();
+        }
+
+        // ==================== PRODUCTOS ====================
+        function crearProductos() {
+            APP.productos = [
+                { id: 1, nombre: 'Hamburguesa', precio: 8500, stock: 20 },
+                { id: 2, nombre: 'Papas Fritas', precio: 3500, stock: 30 },
+                { id: 3, nombre: 'Bebida', precio: 2500, stock: 50 },
+                { id: 4, nombre: 'Pizza', precio: 12000, stock: 15 },
+                { id: 5, nombre: 'Sandwich', precio: 7500, stock: 25 },
+                { id: 6, nombre: 'Postre', precio: 4500, stock: 20 },
+                { id: 7, nombre: 'Alitas', precio: 9000, stock: 18 },
+                { id: 8, nombre: 'Ensalada', precio: 6500, stock: 12 },
+            ];
+            guardarDatos();
+            renderProductos();
+        }
+
+        function renderProductos() {
+            const grid = document.getElementById('productosGrid');
+            grid.innerHTML = APP.productos
+                .filter(p => p.stock > 0)
+                .map(p => `
+                <button class="producto-btn" onclick="agregarAlPedido(${p.id})">
+                    <div>${p.nombre}</div>
+                    <div class="producto-precio">$${formatoMoneda(p.precio)}</div>
+                    <div style="font-size: 0.7rem; color: var(--text-secondary);">Stock: ${p.stock}</div>
+                </button>
+            `).join('');
+        }
+
+        // ==================== PEDIDOS ====================
+        function agregarAlPedido(productoId) {
+            if (!APP.mesaActual) {
+                alert('Selecciona una mesa primero');
+                return;
+            }
+
+            const producto = APP.productos.find(p => p.id === productoId);
+            if (!producto || producto.stock <= 0) {
+                alert('Producto sin stock');
+                return;
+            }
+
+            const itemExistente = APP.mesaActual.pedidos.find(p => p.id === productoId);
+            if (itemExistente) {
+                itemExistente.cantidad++;
+            } else {
+                APP.mesaActual.pedidos.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    precio: producto.precio,
+                    cantidad: 1
+                });
+            }
+
+            if (APP.mesaActual.estado === 'libre') {
+                APP.mesaActual.estado = 'ocupada';
+                renderMesas();
+            }
+
+            actualizarPedido();
+        }
+
+        function actualizarPedido() {
+            const container = document.getElementById('itemsPedido');
+            if (!APP.mesaActual || APP.mesaActual.pedidos.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--text-secondary);">Sin productos</div>';
+            } else {
+                container.innerHTML = APP.mesaActual.pedidos.map(item => `
+                    <div class="item-pedido">
+                        <div>
+                            <div>${item.nombre}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">$${formatoMoneda(item.precio)}</div>
+                        </div>
+                        <div class="item-pedido-controls">
+                            <button onclick="cambiarCantidad(${item.id}, -1)">-</button>
+                            <div style="width: 30px; text-align: center;">${item.cantidad}</div>
+                            <button onclick="cambiarCantidad(${item.id}, 1)">+</button>
+                            <button onclick="eliminarItem(${item.id})" style="background: var(--danger);">×</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            calcularTotales();
+        }
+
+        function cambiarCantidad(productoId, cambio) {
+            const item = APP.mesaActual.pedidos.find(p => p.id === productoId);
+            if (item) {
+                item.cantidad += cambio;
+                if (item.cantidad <= 0) eliminarItem(productoId);
+                else actualizarPedido();
+            }
+        }
+
+        function eliminarItem(productoId) {
+            APP.mesaActual.pedidos = APP.mesaActual.pedidos.filter(p => p.id !== productoId);
+            actualizarPedido();
+        }
+
+        function limpiarPedido() {
+            if (APP.mesaActual) {
+                APP.mesaActual.pedidos = [];
+                APP.mesaActual.estado = 'libre';
+                actualizarPedido();
+                renderMesas();
+            }
+        }
+
+        // ==================== CÁLCULOS ====================
+        function calcularTotales() {
+            if (!APP.mesaActual || APP.mesaActual.pedidos.length === 0) {
+                document.getElementById('subtotal').textContent = '$0';
+                document.getElementById('iva').textContent = '$0';
+                document.getElementById('totalPedido').textContent = '$0';
+                return;
+            }
+
+            const subtotal = APP.mesaActual.pedidos.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            const iva = Math.round(subtotal * APP.IVA);
+            const total = subtotal + iva;
+
+            document.getElementById('subtotal').textContent = '$' + formatoMoneda(subtotal);
+            document.getElementById('iva').textContent = '$' + formatoMoneda(iva);
+            document.getElementById('totalPedido').textContent = '$' + formatoMoneda(total);
+            document.getElementById('totalPago').value = '$' + formatoMoneda(total);
+        }
+
+        // ==================== PAGOS ====================
+        function abrirPagos() {
+            if (!APP.mesaActual || APP.mesaActual.pedidos.length === 0) {
+                alert('No hay productos en el pedido');
+                return;
+            }
+            abrirModal('modalPagos');
+        }
+
+        function procesarPago(tipo) {
+            const subtotal = APP.mesaActual.pedidos.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            const iva = Math.round(subtotal * APP.IVA);
+            const total = subtotal + iva;
+
+            // Descontar inventario
+            APP.mesaActual.pedidos.forEach(item => {
+                const producto = APP.productos.find(p => p.id === item.id);
+                if (producto) {
+                    producto.stock -= item.cantidad;
+                }
+            });
+
+            // Registrar venta
+            APP.ventasHoy.push({
+                hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
+                mesa: APP.mesaActual.numero,
+                total: total,
+                subtotal: subtotal,
+                iva: iva,
+                tipo: tipo,
+                items: JSON.parse(JSON.stringify(APP.mesaActual.pedidos)),
+                fecha: new Date().toISOString()
+            });
+
+            // Cambiar estado mesa
+            APP.mesaActual.estado = 'libre';
+            APP.mesaActual.pedidos = [];
+
+            guardarDatos();
+            renderMesas();
+            actualizarUI();
+            cerrarModal('modalPagos');
+
+            alert(`✓ Pago ${tipo} de $${formatoMoneda(total)}`);
+        }
+
+        // ==================== IMPRESIÓN ====================
+        function imprimirComanda() {
+            if (!APP.mesaActual || APP.mesaActual.pedidos.length === 0) {
+                alert('No hay productos en el pedido');
+                return;
+            }
+
+            const subtotal = APP.mesaActual.pedidos.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            const iva = Math.round(subtotal * APP.IVA);
+            const total = subtotal + iva;
+            const hora = new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            let comanda = `╔════════════════════════════════════════╗
+║         ${APP.negocio.nombre.padEnd(36)}║
+║ ${APP.negocio.rut.padEnd(36)}║
+║ ${APP.negocio.direccion.padEnd(36)}║
+║ Tel: ${APP.negocio.telefono.padEnd(31)}║
+╚════════════════════════════════════════╝
+
+COMANDA PARA COCINA
+Mesa: ${APP.mesaActual.numero}  |  ${hora}
+
+────────────────────────────────────────
+PRODUCTO                    CANT  PRECIO
+────────────────────────────────────────
+`;
+
+            APP.mesaActual.pedidos.forEach(item => {
+                const totalItem = item.precio * item.cantidad;
+                comanda += `${item.nombre.padEnd(24)}${item.cantidad.toString().padStart(4)}  $${formatoMoneda(totalItem)}
+`;
+            });
+
+            comanda += `────────────────────────────────────────
+Subtotal:                         $${formatoMoneda(subtotal)}
+IVA 19%:                          $${formatoMoneda(iva)}
+TOTAL:                            $${formatoMoneda(total)}
+────────────────────────────────────────
+
+OBSERVACIONES:
+
+
+
+
+════════════════════════════════════════
+Gracias por su compra
+════════════════════════════════════════
+`;
+
+            document.getElementById('contenidoComanda').textContent = comanda;
+            abrirModal('modalComanda');
+        }
+
+        function imprimirDirecto() {
+            window.print();
+        }
+
+        // ==================== INVENTARIO ====================
+        function abrirIngreso() {
+            const select = document.getElementById('productoIngreso');
+            select.innerHTML = APP.productos.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+            abrirModal('modalIngreso');
+        }
+
+        function guardarIngreso() {
+            const productoId = parseInt(document.getElementById('productoIngreso').value);
+            const cantidad = parseInt(document.getElementById('cantidadIngreso').value);
+
+            const producto = APP.productos.find(p => p.id === productoId);
+            if (producto) {
+                producto.stock += cantidad;
+                guardarDatos();
+                renderProductos();
+                actualizarInventario();
+                cerrarModal('modalIngreso');
+                alert(`✓ ${cantidad} unidades agregadas`);
+            }
+        }
+
+        function actualizarInventario() {
+            const tbody = document.getElementById('inventarioTable');
+            tbody.innerHTML = APP.productos.map(p => `
+                <tr>
+                    <td>${p.nombre}</td>
+                    <td>${p.stock}</td>
+                    <td>$${formatoMoneda(p.precio)}</td>
+                    <td>${p.stock > 5 ? '✓ OK' : `<span style="color: var(--danger);">⚠ BAJO</span>`}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== REPORTES ====================
+        function actualizarReportes() {
+            const hoy = new Date().toDateString();
+            const ventasHoy = APP.ventasHoy.filter(v => new Date(v.fecha).toDateString() === hoy);
+            const totalVentasHoy = ventasHoy.reduce((sum, v) => sum + v.total, 0);
+            const totalVentasMes = APP.ventasHoy.reduce((sum, v) => sum + v.total, 0);
+            const ticketPromedio = ventasHoy.length > 0 ? Math.round(totalVentasHoy / ventasHoy.length) : 0;
+
+            document.getElementById('ventasHoy').textContent = '$' + formatoMoneda(totalVentasHoy);
+            document.getElementById('ventasMes').textContent = '$' + formatoMoneda(totalVentasMes);
+            document.getElementById('pedidosHoy').textContent = ventasHoy.length;
+            document.getElementById('ticketPromedio').textContent = '$' + formatoMoneda(ticketPromedio);
+            document.getElementById('totalDia').textContent = '$' + formatoMoneda(totalVentasHoy);
+
+            const tbody = document.getElementById('ventasTable');
+            tbody.innerHTML = ventasHoy.slice().reverse().slice(0, 10).map(v => `
+                <tr>
+                    <td>${v.hora}</td>
+                    <td>Mesa ${v.mesa}</td>
+                    <td>$${formatoMoneda(v.total)}</td>
+                    <td>${v.tipo}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== CONFIGURACIÓN ====================
+        function guardarConfig() {
+            APP.negocio.nombre = document.getElementById('nomNegocio').value || 'TechFood PRO';
+            APP.negocio.direccion = document.getElementById('dirNegocio').value;
+            APP.negocio.telefono = document.getElementById('telNegocio').value;
+            APP.negocio.rut = document.getElementById('rutNegocio').value;
+            guardarDatos();
+            alert('✓ Configuración guardada');
+        }
+
+        function confirmarBorrado() {
+            if (confirm('⚠️ ¿Eliminar TODOS los datos? No se puede deshacer')) {
+                if (confirm('Escribe "ELIMINAR" para confirmar')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        }
+
+        // ==================== UTILIDADES ====================
+        function formatoMoneda(num) {
+            return Math.floor(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        function mostrarSeccion(nombre) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(nombre).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (nombre === 'inventario') actualizarInventario();
+            if (nombre === 'reportes') actualizarReportes();
+            if (nombre === 'config') {
+                document.getElementById('nomNegocio').value = APP.negocio.nombre;
+                document.getElementById('dirNegocio').value = APP.negocio.direccion;
+                document.getElementById('telNegocio').value = APP.negocio.telefono;
+                document.getElementById('rutNegocio').value = APP.negocio.rut;
+            }
+        }
+
+        function abrirModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function cerrarModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            document.getElementById('fecha').textContent = ahora.toLocaleDateString('es-CL');
+            document.getElementById('hora').textContent = ahora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function actualizarUI() {
+            renderMesas();
+            renderProductos();
+            actualizarInventario();
+            actualizarReportes();
+        }
+
+        // ==================== PERSISTENCIA ====================
+        function guardarDatos() {
+            localStorage.setItem('techfood_data', JSON.stringify({
+                negocio: APP.negocio,
+                productos: APP.productos,
+                mesas: APP.mesas,
+                ventasHoy: APP.ventasHoy
+            }));
+        }
+
+        function cargarDatos() {
+            const datos = localStorage.getItem('techfood_data');
+            if (datos) {
+                try {
+                    const obj = JSON.parse(datos);
+                    APP.negocio = obj.negocio || APP.negocio;
+                    APP.productos = obj.productos || [];
+                    APP.mesas = obj.mesas || [];
+                    APP.ventasHoy = obj.ventasHoy || [];
+                } catch (e) {
+                    console.error('Error cargando datos');
+                }
+            }
+        }
+
+        // ==================== INICIO ====================
+        document.addEventListener('DOMContentLoaded', inicializar);
+        window.addEventListener('beforeunload', guardarDatos);
+    </script>
 </body>
 </html>
